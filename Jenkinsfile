@@ -1,11 +1,28 @@
-pipeline {
-    agent any
-   triggers { upstream(upstreamProjects: 'job1,job2', threshold: hudson.model.Result.SUCCESS) }
-    stages {
-        stage('Hello') {
-            steps {
-                echo 'Hello World'
+pipeline{
+    agent {
+        docker {
+            image "postman/newman"
+            args "--entrypoint=''"
+        }
+        
+    }
+
+    stages{
+        stage('verifier la version de newman'){
+            steps{
+                sh 'newman --version'
             }
+        }
+        stage('Test API'){
+            steps{
+                sh 'newman run collections/Collection1.json -r cli,junit --reporter-junit-export="newman-report.xml"'
+            }
+        }
+    }
+    post{
+        always {
+            junit 'newman-report.xml'
+            archiveArtifacts artifacts: 'newman-report.xml'
         }
     }
 }
