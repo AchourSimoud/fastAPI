@@ -2,7 +2,7 @@ pipeline{
     agent {
         docker {
             image "postman/newman"
-            args "--entrypoint=''"
+            args "--entrypoint='' --user root"
         }
         
     }
@@ -13,16 +13,24 @@ pipeline{
                 sh 'newman --version'
             }
         }
+
+        stage('Install htmlextra'){
+            steps{
+                sh 'npm install newman-reporter-htmlextra'
+            }
+            
+        }
+
         stage('Test API'){
             steps{
-                sh 'newman run collections/Collection1.json -r cli,junit --reporter-junit-export="newman-report.xml"'
+                sh 'newman run collections/Collection1.json --reporters htmlextra --reporter-htmlextra-export reports/api-test-report.html'
             }
         }
     }
     post{
         always {
-            junit 'newman-report.xml'
-            archiveArtifacts artifacts: 'newman-report.xml'
+            echo 'Archivage des rapports...'
+            archiveArtifacts artifacts: 'reports/api-test-report.html', fingerprint: true
         }
     }
 }
