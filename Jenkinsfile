@@ -1,8 +1,6 @@
 pipeline {
     agent any
-    triggers{
-        triggers { upstream(upstreamProjects: 'fastAPI', threshold: hudson.model.Result.SUCCESS) }
-    }
+   triggers { upstream(upstreamProjects: 'job1,job2', threshold: hudson.model.Result.SUCCESS) }
     stages {
         stage('Hello') {
             steps {
