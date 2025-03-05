@@ -7,6 +7,9 @@ pipeline{
     }
         
 
+    triggers { upstream(upstreamProjects: '', threshold: 
+    hudson.model.Result.SUCCESS) }
+
     stages{
         stage('verifier la version de newman'){
             steps{
