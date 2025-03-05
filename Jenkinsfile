@@ -7,7 +7,7 @@ pipeline{
     }
         
 
-    triggers { upstream(upstreamProjects: '', threshold: 
+    triggers { upstream(upstreamProjects: 'fastAPI', threshold: 
     hudson.model.Result.SUCCESS) }
 
     stages{
