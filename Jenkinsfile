@@ -2,7 +2,6 @@ pipeline{
     agent {
         docker {
             image "postman/newman"
-            args "-u root" 
         }
     }
         
